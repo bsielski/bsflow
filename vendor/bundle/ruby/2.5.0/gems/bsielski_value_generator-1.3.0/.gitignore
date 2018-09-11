@@ -1,0 +1,27 @@
+/.bundle/
+/.yardoc
+/_yardoc/
+/coverage/
+/doc/
+/pkg/
+/spec/reports/
+/tmp/
+
+# rspec failure tracking
+.rspec_status
+
+*.gem
+Gemfile.lock
+
+# Ignore vendor/bundle
+/vendor/bundle
+
+# Ignore Emacs garbage
+*~
+.*~
+\#*.*#
+.#*.*
+
+# Ignore design docs
+*.org
+*.org#
