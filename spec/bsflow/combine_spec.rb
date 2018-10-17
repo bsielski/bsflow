@@ -1,7 +1,7 @@
-require "c_flow/#{File.basename(__FILE__).chomp("_spec.rb")}"
+require "bsflow/#{File.basename(__FILE__).chomp("_spec.rb")}"
 require_relative "../random_values_helper"
 
-RSpec.describe CFlow::Combine do
+RSpec.describe BSFlow::Combine do
   subject (:actual_output) {
     described_class.new(
       sub_procs: sub_procs,

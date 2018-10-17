@@ -1,17 +1,17 @@
-# bsielski Control Flow
+# bsflow
 
-A couple of classes for organizing objects in simple data flow structures (conditional loops, pipelines etc.).
+A couple of classes that represent useful control flow patterns (conditional loops, pipelines etc.
 
 ## When to use it?
 
-Who knows. Maybe in pseudo-funtional programming.
+In pseudo-funtional programming.
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'bsielski_control_flow'
+gem 'bsflow'
 ```
 
 And then execute:
@@ -20,20 +20,20 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install bsielski_control_flow
+    $ gem install bsflow
 
 ## Usage
 
 Reqiure proper class.
 
 ```ruby
-require "c_flow/pipeline"
+require "bsflow/pipeline"
 ```
 
 Use it.
 
 ```ruby
-square_number_generator = CFlow:Pipeline.new(procs: [random_int, square])
+square_number_generator = BSFlow:Pipeline.new(procs: [random_int, square])
 
 ```
 
@@ -45,14 +45,14 @@ Some classes have dependencies (injected in constructor) called "procs". They ar
 ## API
 
 
-### Class CFlow::Pipeline
+### Class BSFlow::Pipeline
 
 It passes a value through every proc and returns a final value. Output of the previous proc is input of the next proc.
 
 Source code:
 
 ```ruby
-module CFlow
+module BSFlow
   class Pipeline
     def initialize(procs:)
       @procs = procs
@@ -71,13 +71,13 @@ end
 #### Require
 
 ```ruby
-require "c_flow/pipeline"
+require "bsflow/pipeline"
 ```
 
 #### Constructor
 
 ```ruby
-CFlow:Pipeline.new(procs: procs) # => new_pipeline
+BSFlow:Pipeline.new(procs: procs) # => new_pipeline
 ```
 
 Paramaters:
@@ -85,14 +85,14 @@ Paramaters:
   - **_procs_** - an array of procs or objects responding on `.call` message with one argument. The first **_proc_** takes the "main" input of the class. THe result is passed to the next **_proc_** as input. The output of the last **_proc_** is the output of `.call` method of **Pipeline** class.
 
 
-### Class CFlow::Self
+### Class BSFlow::Self
 
 It returns unmodified argument.
 
 Source code:
 
 ```ruby
-module CFlow
+module BSFlow
   class Self
     def call(input)
       input
@@ -104,23 +104,23 @@ end
 #### Require
 
 ```ruby
-require "c_flow/self"
+require "bsflow/self"
 ```
 
 #### Constructor
 
 ```ruby
-CFlow:Self.new # => new_self
+BSFlow:Self.new # => new_self
 ```
 
-### Class CFlow::True
+### Class BSFlow::True
 
 It returns **_true_** no matter what input it takes.
 
 Source code:
 
 ```ruby
-module CFlow
+module BSFlow
   class True
     def call(input)
       true
@@ -132,23 +132,23 @@ end
 #### Require
 
 ```ruby
-require "c_flow/true"
+require "bsflow/true"
 ```
 
 #### Constructor
 
 ```ruby
-CFlow:True.new # => new_true
+BSFlow:True.new # => new_true
 ```
 
-### Class CFlow::False
+### Class BSFlow::False
 
 It returns **_false_** no matter what input it takes.
 
 Source code:
 
 ```ruby
-module CFlow
+module BSFlow
   class False
     def call(input)
       false
@@ -160,24 +160,24 @@ end
 #### Require
 
 ```ruby
-require "c_flow/false"
+require "bsflow/false"
 ```
 
 #### Constructor
 
 ```ruby
-CFlow:False.new # => new_false
+BSFlow:False.new # => new_false
 ```
 
 
-### Class CFlow::Combine
+### Class BSFlow::Combine
 
 It passes input to each helper proc, then it passes the outputs to one proc and returns the output.
 
 Source code:
 
 ```ruby
-module CFlow
+module BSFlow
   class Combine
     def initialize(combine_proc:, sub_procs:)
       @sub_procs = sub_procs
@@ -198,13 +198,13 @@ end
 #### Require
 
 ```ruby
-require "c_flow/combine"
+require "bsflow/combine"
 ```
 
 #### Constructor
 
 ```ruby
-CFlow::Combine.new(sub_procs: sub_procs, combine_proc: combine_proc) # => new_combine
+BSFlow::Combine.new(sub_procs: sub_procs, combine_proc: combine_proc) # => new_combine
 ```
 
 Paramaters:
@@ -213,14 +213,14 @@ Paramaters:
   - **_combine_procs_** - a proc or object responding on `.call` message with one or many arguments. The output of this proc is the output of the `.call` method of the **Combine** class.
   
 
-### Class CFlow::UntilTrueLoop
+### Class BSFlow::UntilTrueLoop
 
 It passes input to condition_proc and if the result is not true it pases the input to loop_proc until the result is true.
 
 Source code:
 
 ```ruby
-module CFlow
+module BSFlow
   class UntilTrueLoop
     def initialize(condition_proc:, loop_proc:)
       @loop_proc = loop_proc
@@ -240,13 +240,13 @@ end
 #### Require
 
 ```ruby
-require "c_flow/until_true_loop"
+require "bsflow/until_true_loop"
 ```
 
 #### Constructor
 
 ```ruby
-CFlow::UntilTrueLoop.new(condition_proc: condition_proc, loop_proc: loop_proc) # => new_loop
+BSFlow::UntilTrueLoop.new(condition_proc: condition_proc, loop_proc: loop_proc) # => new_loop
 ```
 
 Paramaters:

@@ -1,4 +1,4 @@
-module CFlow
+module BSFlow
   class UntilTrueLoop
     def initialize(condition_proc:, loop_proc:)
       @loop_proc = loop_proc

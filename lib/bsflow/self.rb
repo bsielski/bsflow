@@ -1,4 +1,4 @@
-module CFlow
+module BSFlow
   class Self
     def call(input)
       input

@@ -1,4 +1,4 @@
-module CFlow
+module BSFlow
   class Combine
     def initialize(combine_proc:, sub_procs:)
       @sub_procs = sub_procs

@@ -1,4 +1,4 @@
-module CFlow
+module BSFlow
   class True
     def call(input)
       true

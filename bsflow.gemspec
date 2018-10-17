@@ -1,16 +1,16 @@
 
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require "c_flow/version"
+require "bsflow/version"
 
 Gem::Specification.new do |spec|
-  spec.name          = "bsielski_control_flow"
-  spec.version       = CFlow::VERSION
+  spec.name          = "bsflow"
+  spec.version       = BSFlow::VERSION
   spec.authors       = ["Bart\xC5\x82omiej Sielski"]
-  spec.email         = ["b.sielski@yandex.com"]
+  spec.email         = ["b.sielski.webdev@gmail.com"]
 
-  spec.summary       = %q{A couple of classes for organizing objects in simple data flow structures (conditional loops, pipelines etc.}
-  spec.homepage      = "https://github.com/bsielski/bsielski_control_flow"
+  spec.summary       = %q{A couple of classes that represent useful control flow patterns (conditional loops, pipelines etc.}
+  spec.homepage      = "https://github.com/bsielski/bsflow"
   spec.license       = "MIT"
 
 

@@ -1,4 +1,4 @@
-module CFlow
+module BSFlow
   class Pipeline
     def initialize(procs:)
       @procs = procs

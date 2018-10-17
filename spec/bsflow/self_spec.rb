@@ -1,7 +1,7 @@
-require "c_flow/#{File.basename(__FILE__).chomp("_spec.rb")}"
+require "bsflow/#{File.basename(__FILE__).chomp("_spec.rb")}"
 require_relative "../random_values_helper"
 
-RSpec.describe CFlow::Self do
+RSpec.describe BSFlow::Self do
   subject (:actual_output) {
     described_class.new(
     ).(input)
