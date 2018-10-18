@@ -82,7 +82,7 @@ BSFlow:Pipeline.new(procs: procs) # => new_pipeline
 
 Paramaters:
 
-  - **_procs_** - an array of procs or objects responding on `.call` message with one argument. The first **_proc_** takes the "main" input of the class. THe result is passed to the next **_proc_** as input. The output of the last **_proc_** is the output of `.call` method of **Pipeline** class.
+  - **_procs_** - an array of procs or objects responding on `.call` message with one argument. The first **_proc_** takes the "main" input of the class. The result is passed to the next **_proc_** as input. The output of the last **_proc_** is the output of `.call` method of **Pipeline** class.
 
 
 ### Class BSFlow::Self
@@ -169,6 +169,42 @@ require "bsflow/false"
 BSFlow:False.new # => new_false
 ```
 
+### Class BSFlow::Pass
+
+It passes a value to a proc and returns the unmodified value. So it is a one way ticket for data but it is usefull for sending data to some output stream or queue.
+
+Source code:
+
+```ruby
+module BSFlow
+  class Pass
+    def initialize(proc:)
+      @proc = proc
+    end
+    
+    def call(input)
+      @proc.call(input)
+      input
+    end
+  end
+end
+```
+
+#### Require
+
+```ruby
+require "bsflow/pass"
+```
+
+#### Constructor
+
+```ruby
+BSFlow:Pass.new(proc: proc) # => new_pass
+```
+
+Paramaters:
+
+  - **_proc_** - an objects responding on `.call` message with one argument.
 
 ### Class BSFlow::Combine
 
