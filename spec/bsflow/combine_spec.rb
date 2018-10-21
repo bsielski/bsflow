@@ -9,80 +9,51 @@ RSpec.describe BSFlow::Combine do
     )
   }
 
-  let (:org_input) { random_value }
-  let (:input) { Marshal.load(Marshal.dump(org_input)) }
-  
-  context "no sub_procs" do
-    let (:sub_procs) { [] }
-    let (:combine_proc) { double("Fake Combine Proc") }
+  let (:combine_proc) { double("Fake Combine Proc") }
+  let (:number_of_sub_procs) { [0, 1, Random.new.rand(2..100)].sample }
+  let (:sub_procs) {
+    Array.new(number_of_sub_procs) do |i|
+      double("Fake Sub Proc Number #{i}")  
+    end
+  }
+  let (:number_of_inputs) { [0, 1, Random.new.rand(2..100)].sample }
+  let (:org_inputs) {
+    Array.new(number_of_inputs) do |i|
+      random_value
+    end
+  }
+  let (:inputs) { Marshal.load(Marshal.dump(org_inputs)) }
+  let (:sub_proc_outputs) { unique_array(number_of_sub_procs) }
+  let (:expected_output) { random_value }
 
-    let (:expected_output) { random_value }
-    before do
+  before do
+    sub_procs.each_with_index do |sub_proc, i|
+      unless number_of_inputs == 0
+        allow(sub_proc).
+          to receive(:call).with(*inputs).
+               and_return(sub_proc_outputs[i])
+      else
+        allow(sub_proc).
+          to receive(:call).
+               and_return(sub_proc_outputs[i])
+      end
+    end
+  end
+  before do
+    unless sub_proc_outputs.empty?
+      allow(combine_proc).
+        to receive(:call).with(*sub_proc_outputs).
+             and_return(expected_output)
+    else
       allow(combine_proc).
         to receive(:call).
              and_return(expected_output)
     end
-    
-    10.times do
-      it "returns correct value" do
-        expect(subject.call(input)).to eq expected_output
-      end
+  end
+  
+  30.times do
+    it "returns correct value" do
+      expect(subject.call(*inputs)).to eq expected_output
     end
   end
-
-  context "one sub_proc" do
-    let (:sub_procs) { [double("Fake Sub Proc")] }
-    let (:combine_proc) { double("Fake Combine Proc") }
-    let (:sub_proc_output) { random_value }
-    let (:expected_output) { random_value }
-    before do
-      sub_procs.each do |sub_proc|
-        allow(sub_proc).
-          to receive(:call).with(input).
-               and_return(sub_proc_output)
-      end
-    end
-    before do
-      allow(combine_proc).
-        to receive(:call).with(sub_proc_output).
-             and_return(expected_output)
-    end
-    
-    10.times do
-      it "returns correct value" do
-        expect(subject.call(input)).to eq expected_output
-      end
-    end
-  end
-
-  context "random number of sub_procs" do
-    let (:number_of_sub_procs) { Random.new.rand(2..100) }
-    let (:sub_procs) {
-      Array.new(number_of_sub_procs) do |i|
-        double("Fake Sub Proc Number #{i}")  
-      end
-    }
-    let (:combine_proc) { double("Fake Combine Proc") }
-    let (:sub_proc_outputs) { unique_array(number_of_sub_procs) }
-    let (:expected_output) { random_value }
-    before do
-      sub_procs.each_with_index do |sub_proc, i|
-        allow(sub_proc).
-          to receive(:call).with(input).
-               and_return(sub_proc_outputs[i])
-      end
-    end
-    before do
-      allow(combine_proc).
-        to receive(:call).with(*sub_proc_outputs).
-             and_return(expected_output)
-    end
-    
-    10.times do
-      it "returns correct value" do
-        expect(subject.call(input)).to eq expected_output
-      end
-    end
-  end
-
 end
