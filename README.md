@@ -37,10 +37,9 @@ square_number_generator = BSFlow:Pipeline.new(procs: [random_int, square])
 
 ```
 
-All classes have just one public method: ***#call***. This method takes always one argument.
+All classes have just one public method: ***#call***.
 
-Some classes have dependencies (injected in constructor) called "procs". They are objects that respond to ***#call*** method. This method takes one argument or variable number of arguments (it depends of object's role).
-
+Some classes have dependencies (injected in constructor) called "procs". They are objects that respond to ***#call*** method.
 
 ## API
 
@@ -58,14 +57,18 @@ module BSFlow
       @procs = procs
     end
     
-    def call(input)
-      @procs.each do |proc|
-        input = proc.call(input)
+    def call(*args)
+      output = @procs[0].call(*args)
+      if @procs.length == 1
+        return output
+      else
+        @procs[1..-1].each do |proc|
+          output = proc.call(output)
+        end
+        output
       end
-      input
     end
   end
-end
 ```
 
 #### Require
@@ -82,7 +85,65 @@ BSFlow:Pipeline.new(procs: procs) # => new_pipeline
 
 Paramaters:
 
-  - **_procs_** - an array of procs or objects responding on `.call` message with one argument. The first **_proc_** takes the "main" input of the class. The result is passed to the next **_proc_** as input. The output of the last **_proc_** is the output of `.call` method of **Pipeline** class.
+  - **_procs_** - an array of procs or objects responding on `.call` message. The first **_proc_** takes the "main" input of the class (any number of arguments). The result is passed to the next **_proc_** as input. The output of the last **_proc_** is the output of `.call` method of **Pipeline** class.
+
+
+### Class BSFlow::FirstArg
+
+It just returns first pased argument and ignores the rest. Used to reduce number of arguments.
+
+Source code:
+
+```ruby
+module BSFlow
+  class FirstArg
+    def call(*args)
+      args.first
+    end
+  end
+end
+```
+
+#### Require
+
+```ruby
+require "bsflow/first_arg"
+```
+
+#### Constructor
+
+```ruby
+BSFlow:FirstArg.new # => new_first_arg
+```
+
+
+### Class BSFlow::LastArg
+
+It just returns last pased argument and ignores the rest. Used to reduce number of arguments.
+
+Source code:
+
+```ruby
+module BSFlow
+  class LastArg
+    def call(*args)
+      args.last
+    end
+  end
+end
+```
+
+#### Require
+
+```ruby
+require "bsflow/last_arg"
+```
+
+#### Constructor
+
+```ruby
+BSFlow:LastArg.new # => new_last_arg
+```
 
 
 ### Class BSFlow::Self
@@ -208,7 +269,7 @@ Paramaters:
 
 ### Class BSFlow::Combine
 
-It passes input to each helper proc, then it passes the outputs to one proc and returns the output.
+It passes its `.call` arguments to each injected sub_proc, then it passes their outputs to injected combine_proc and returns the output.
 
 Source code:
 
@@ -220,10 +281,10 @@ module BSFlow
       @combine_proc = combine_proc
     end
     
-    def call(input)
+    def call(*args)
       sub_proc_outputs = []
       @sub_procs.each do |sub_proc|
-        sub_proc_outputs << sub_proc.call(input)
+        sub_proc_outputs << sub_proc.call(*args)
       end
       @combine_proc.call(*sub_proc_outputs)
     end
@@ -245,9 +306,9 @@ BSFlow::Combine.new(sub_procs: sub_procs, combine_proc: combine_proc) # => new_c
 
 Paramaters:
 
-  - **_sub_procs_** - an array of procs or objects responding on `.call` message with one argument. Each of them takes the "main" value a an argument and return an output. All aoutpus are pased to **_combine_proc_**.
-  - **_combine_procs_** - a proc or object responding on `.call` message with one or many arguments. The output of this proc is the output of the `.call` method of the **Combine** class.
-  
+  - **_sub_procs_** - an array of procs or objects responding on `.call` message. Each of them takes arguments from combine object's call method and return an output. All aoutpus are pased to **_combine_proc_**.
+  - **_combine_procs_** - a proc or object responding on `.call` message. The output of this proc is the output of the `.call` method of the **Combine** class.
+
 
 ### Class BSFlow::UntilTrueLoop
 
