@@ -4,11 +4,16 @@ module BSFlow
       @procs = procs
     end
     
-    def call(input)
-      @procs.each do |proc|
-        input = proc.call(input)
+    def call(*args)
+      output = @procs[0].call(*args)
+      if @procs.length == 1
+        return output
+      else
+        @procs[1..-1].each do |proc|
+          output = proc.call(output)
+        end
+        output
       end
-      input
     end
   end
 end
