@@ -2,10 +2,8 @@ require "bsflow/#{File.basename(__FILE__).chomp("_spec.rb")}"
 require_relative "../random_values_helper"
 
 RSpec.describe BSFlow::Pipeline do
-  subject (:actual_output) {
-    described_class.new(
-      procs: procs
-    ).(input)
+  subject {
+    described_class.new(procs: procs)
   }
 
   let (:org_input) { random_value }
@@ -15,7 +13,7 @@ RSpec.describe BSFlow::Pipeline do
     let (:procs) { [] }
     10.times do
       it "returns same value" do
-        expect(actual_output).to eq input
+        expect(subject.call(input)).to eq input
       end
     end
   end
@@ -32,7 +30,7 @@ RSpec.describe BSFlow::Pipeline do
     end
     10.times do
       it "returns correct value" do
-        expect(actual_output).to eq expected_output
+        expect(subject.call(input)).to eq expected_output
       end
     end
   end
@@ -57,7 +55,7 @@ RSpec.describe BSFlow::Pipeline do
     end
     10.times do
       it "returns correct value" do
-        expect(actual_output).to eq value_timeline.last
+        expect(subject.call(input)).to eq value_timeline.last
       end
     end
   end

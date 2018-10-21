@@ -2,11 +2,11 @@ require "bsflow/#{File.basename(__FILE__).chomp("_spec.rb")}"
 require_relative "../random_values_helper"
 
 RSpec.describe BSFlow::Combine do
-  subject (:actual_output) {
+  subject {
     described_class.new(
       sub_procs: sub_procs,
       combine_proc: combine_proc
-    ).(input)
+    )
   }
 
   let (:org_input) { random_value }
@@ -25,7 +25,7 @@ RSpec.describe BSFlow::Combine do
     
     10.times do
       it "returns correct value" do
-        expect(actual_output).to eq expected_output
+        expect(subject.call(input)).to eq expected_output
       end
     end
   end
@@ -50,7 +50,7 @@ RSpec.describe BSFlow::Combine do
     
     10.times do
       it "returns correct value" do
-        expect(actual_output).to eq expected_output
+        expect(subject.call(input)).to eq expected_output
       end
     end
   end
@@ -80,7 +80,7 @@ RSpec.describe BSFlow::Combine do
     
     10.times do
       it "returns correct value" do
-        expect(actual_output).to eq expected_output
+        expect(subject.call(input)).to eq expected_output
       end
     end
   end

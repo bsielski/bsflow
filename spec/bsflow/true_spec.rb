@@ -2,9 +2,8 @@ require "bsflow/#{File.basename(__FILE__).chomp("_spec.rb")}"
 require_relative "../random_values_helper"
 
 RSpec.describe BSFlow::True do
-  subject (:actual_output) {
-    described_class.new(
-    ).(input)
+  subject {
+    described_class.new
   }
 
   let (:org_input) { random_value }
@@ -12,7 +11,7 @@ RSpec.describe BSFlow::True do
   
   10.times do
     it "returns true" do
-      expect(actual_output).to be true
+      expect(subject.call(input)).to be true
     end
   end
 end
