@@ -1,27 +1,20 @@
 require "bsflow/#{File.basename(__FILE__).chomp("_spec.rb")}"
 require_relative "../random_values_helper"
 
-def generate_args
-  number_of_inputs = [0, 1, Random.new.rand(2..100)].sample
-  Array.new(number_of_inputs) do |i|
-    random_value
-  end
-end
-
 RSpec.describe BSFlow::Pipeline do
   subject {
     described_class.new(procs: procs)
   }
-  let (:org_inputs) { generate_args }
+  let (:org_inputs) { testing_array }
   let (:inputs) { Marshal.load(Marshal.dump(org_inputs)) }
-  let (:number_of_procs) { [1, Random.new.rand(2..100)].sample }
+  let (:value_timeline) {
+    ([inputs] + [random_value] + testing_array).uniq
+  }
+  let (:number_of_procs) { value_timeline.length - 1 }
   let (:procs) {
     Array.new(number_of_procs) do |i|
       double("Fake Proc Number #{i}")  
     end
-  }
-  let (:value_timeline) {
-    [inputs] + unique_array(number_of_procs)
   }
   let (:expected_output) { random_value }
   before do

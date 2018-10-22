@@ -8,23 +8,20 @@ RSpec.describe BSFlow::Combine do
       combine_proc: combine_proc
     )
   }
+  let (:org_inputs) { testing_array }
+  let (:number_of_inputs) { org_inputs.length }
+  let (:inputs) { Marshal.load(Marshal.dump(org_inputs)) }
 
-  let (:combine_proc) { double("Fake Combine Proc") }
-  let (:number_of_sub_procs) { [0, 1, Random.new.rand(2..100)].sample }
+  let (:sub_proc_outputs) { testing_array }
+
+  let (:number_of_sub_procs) { sub_proc_outputs.length }
   let (:sub_procs) {
     Array.new(number_of_sub_procs) do |i|
       double("Fake Sub Proc Number #{i}")  
     end
   }
-  let (:number_of_inputs) { [0, 1, Random.new.rand(2..100)].sample }
-  let (:org_inputs) {
-    Array.new(number_of_inputs) do |i|
-      random_value
-    end
-  }
-  let (:inputs) { Marshal.load(Marshal.dump(org_inputs)) }
-  let (:sub_proc_outputs) { unique_array(number_of_sub_procs) }
   let (:expected_output) { random_value }
+  let (:combine_proc) { double("Fake Combine Proc") }
 
   before do
     sub_procs.each_with_index do |sub_proc, i|

@@ -48,10 +48,10 @@ RSpec.describe BSFlow::UntilTrueLoop do
   end
 
   context "condition is true after random number of loops" do
-    let (:number_of_loops) { Random.new.rand(2..500) }
     let (:value_timeline) {
-      [input] + unique_array(number_of_loops)
+      ([input] + [random_value] + random_flat_array).uniq
     }
+    let (:number_of_loops) { value_timeline.length - 1}
     let (:condition_timeline) {
       Array.new(number_of_loops, false) + [true]
     }
