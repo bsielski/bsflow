@@ -12,4 +12,4 @@
 
 *.gem
 
-# Ignore vendor/bundle
+vendor/bundle
