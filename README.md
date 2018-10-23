@@ -1,6 +1,6 @@
 # bsflow
 
-A couple of classes that represent useful control flow patterns (conditional loops, pipelines etc.
+A couple of classes that represent useful control flow patterns (conditional loops, pipelines etc).
 
 ## When to use it?
 
