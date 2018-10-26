@@ -88,6 +88,117 @@ Paramaters:
   - **_procs_** - an array of procs or objects responding on `.call` message. The first **_proc_** takes the "main" input of the class (any number of arguments). The result is passed to the next **_proc_** as input. The output of the last **_proc_** is the output of `.call` method of **Pipeline** class.
 
 
+### Class BSFlow::StdoutAdapter
+
+It allows to "connect" standard output stream to an object that expects `#call` mathod.
+
+Source code:
+
+```ruby
+module BSFlow
+  class StdoutAdapter
+    def initialize(stdout:)
+      @stdout = stdout
+    end
+
+    def call(string)
+      @stdout.puts(string)
+    end
+  end
+end
+```
+
+#### Require
+
+```ruby
+require "bsflow/stdout_adapter"
+```
+
+#### Constructor
+
+```ruby
+BSFlow:StdoutAdapter.new(procs: procs) # => new_adapter
+```
+
+Paramaters:
+
+  - **_stdout_** - an object that respond to `.#puts` message with one argument.
+
+
+### Class BSFlow::StdinAdapter
+
+It allows to "connect" standard input stream to an object that expects `#call` mathod.
+
+Source code:
+
+```ruby
+module BSFlow
+  class StdinAdapter
+    def initialize(stdin:)
+      @stdin = stdin
+    end
+
+    def call()
+      @stdin.gets.chomp
+    end
+  end
+end
+```
+
+#### Require
+
+```ruby
+require "bsflow/stdin_adapter"
+```
+
+#### Constructor
+
+```ruby
+BSFlow:StdinAdapter.new(stdin: stdin) # => new_adapter
+```
+
+Paramaters:
+
+  - **_stdin_** - an object that respond to `.#gets` message. The chomped output of this object is the output of `.call` method of **StdinAdapter** class.
+
+
+### Class BSFlow::SquareBracketsAdapter
+
+It passes a value to **_[]_** method of a hash or any objects that response to [] method.
+
+Source code:
+
+```ruby
+module BSFlow
+  class SquareBracketsAdapter
+    def initialize(map:)
+      @map = map
+    end
+
+    def call(symbol)
+      @map[symbol]
+    end
+  end
+end
+```
+
+#### Require
+
+```ruby
+require "bsflow/square_brackets_adapter"
+```
+
+#### Constructor
+
+```ruby
+BSFlow:SquareBracketsAdapter.new(map: map) # => new_square_brackets_adapter
+```
+
+Paramaters:
+
+  - **_map_** - an object that respond to `.#[]` message. It takes the "main" input of the class (one argument). The output of this object is the output of `.call` method of **SquareBracketsAdapter** class.
+
+
 ### Class BSFlow::FirstArg
 
 It just returns first pased argument and ignores the rest. Used to reduce number of arguments.
