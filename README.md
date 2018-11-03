@@ -378,6 +378,43 @@ Paramaters:
 
   - **_proc_** - an objects responding on `.call` message with one argument.
 
+### Class BSFlow::DropArgs
+
+It calls a proc and returns its output. All arguments are ignored.
+
+Source code:
+
+```ruby
+module BSFlow
+  class DropArgs
+    def initialize(proc:)
+      @proc = proc
+    end
+    
+    def call(*args)
+      @proc.call
+    end
+  end
+end
+```
+
+#### Require
+
+```ruby
+require "bsflow/drop_args"
+```
+
+#### Constructor
+
+```ruby
+BSFlow:DropArgs.new(proc: proc) # => new_args_dropper
+```
+
+Paramaters:
+
+  - **_proc_** - an objects responding on `.call` message without arguments.
+
+
 ### Class BSFlow::Combine
 
 It passes its `.call` arguments to each injected sub_proc, then it passes their outputs to injected combine_proc and returns the output.
