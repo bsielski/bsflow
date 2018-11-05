@@ -1,7 +1,7 @@
 module BSFlow
   class Combine
-    def initialize(combine_proc:, sub_procs:)
-      @sub_procs = sub_procs
+    def initialize(*args, combine_proc:, sub_procs: [])
+      @sub_procs = args + sub_procs
       @combine_proc = combine_proc
     end
     

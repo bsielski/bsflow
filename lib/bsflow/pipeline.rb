@@ -1,7 +1,7 @@
 module BSFlow
   class Pipeline
-    def initialize(procs:)
-      @procs = procs
+    def initialize(*args, procs: [])
+      @procs = args + procs
     end
     
     def call(*args)

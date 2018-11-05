@@ -53,8 +53,8 @@ Source code:
 ```ruby
 module BSFlow
   class Pipeline
-    def initialize(procs:)
-      @procs = procs
+    def initialize(*args, procs: [])
+      @procs = args + procs
     end
     
     def call(*args)
@@ -69,6 +69,7 @@ module BSFlow
       end
     end
   end
+end
 ```
 
 #### Require
@@ -81,11 +82,18 @@ require "bsflow/pipeline"
 
 ```ruby
 BSFlow:Pipeline.new(procs: procs) # => new_pipeline
+
+# or
+BSFlow:Pipeline.new(*procs) # => new_pipeline
+
+# or 
+BSFlow:Pipeline.new(*first_part_of_procs, procs: rest_of_procs) # => new_pipeline
 ```
 
 Paramaters:
 
   - **_procs_** - an array of procs or objects responding on `.call` message. The first **_proc_** takes the "main" input of the class (any number of arguments). The result is passed to the next **_proc_** as input. The output of the last **_proc_** is the output of `.call` method of **Pipeline** class.
+  The procs can be passed as a normal arguments or as a list arguments
 
 
 ### Class BSFlow::StdoutAdapter
@@ -424,8 +432,8 @@ Source code:
 ```ruby
 module BSFlow
   class Combine
-    def initialize(combine_proc:, sub_procs:)
-      @sub_procs = sub_procs
+    def initialize(*args, combine_proc:, sub_procs: [])
+      @sub_procs = args + sub_procs
       @combine_proc = combine_proc
     end
     
@@ -438,6 +446,7 @@ module BSFlow
     end
   end
 end
+
 ```
 
 #### Require
@@ -450,6 +459,12 @@ require "bsflow/combine"
 
 ```ruby
 BSFlow::Combine.new(sub_procs: sub_procs, combine_proc: combine_proc) # => new_combine
+
+# or
+BSFlow::Combine.new(*sub_procs, combine_proc: combine_proc) # => new_combine
+
+# or
+BSFlow::Combine.new(*first_part_of_sub_procs, sub_procs: rest_of_sub_procs, combine_proc: combine_proc) # => new_combine
 ```
 
 Paramaters:
