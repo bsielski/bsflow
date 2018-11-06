@@ -432,9 +432,14 @@ Source code:
 ```ruby
 module BSFlow
   class Combine
-    def initialize(*args, combine_proc:, sub_procs: [])
-      @sub_procs = args + sub_procs
-      @combine_proc = combine_proc
+    def initialize(*args, combine_proc: nil, sub_procs: [])
+      if combine_proc
+        @sub_procs = sub_procs
+        @combine_proc = combine_proc
+      else
+        @sub_procs = args[0..-2]
+        @combine_proc = args.last
+      end
     end
     
     def call(*args)
@@ -446,7 +451,6 @@ module BSFlow
     end
   end
 end
-
 ```
 
 #### Require
@@ -461,16 +465,13 @@ require "bsflow/combine"
 BSFlow::Combine.new(sub_procs: sub_procs, combine_proc: combine_proc) # => new_combine
 
 # or
-BSFlow::Combine.new(*sub_procs, combine_proc: combine_proc) # => new_combine
-
-# or
-BSFlow::Combine.new(*first_part_of_sub_procs, sub_procs: rest_of_sub_procs, combine_proc: combine_proc) # => new_combine
+BSFlow::Combine.new(*sub_procs, combine_proc) # => new_combine
 ```
 
 Paramaters:
 
   - **_sub_procs_** - an array of procs or objects responding on `.call` message. Each of them takes arguments from combine object's call method and return an output. All aoutpus are pased to **_combine_proc_**.
-  - **_combine_procs_** - a proc or object responding on `.call` message. The output of this proc is the output of the `.call` method of the **Combine** class.
+  - **_combine_proc_** - a proc or object responding on `.call` message. The output of this proc is the output of the `.call` method of the **Combine** class.
 
 
 ### Class BSFlow::UntilTrueLoop

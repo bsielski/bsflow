@@ -1,8 +1,13 @@
 module BSFlow
   class Combine
-    def initialize(*args, combine_proc:, sub_procs: [])
-      @sub_procs = args + sub_procs
-      @combine_proc = combine_proc
+    def initialize(*args, combine_proc: nil, sub_procs: [])
+      if combine_proc
+        @sub_procs = sub_procs
+        @combine_proc = combine_proc
+      else
+        @sub_procs = args[0..-2]
+        @combine_proc = args.last
+      end
     end
     
     def call(*args)

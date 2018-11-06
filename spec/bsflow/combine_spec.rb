@@ -41,24 +41,11 @@ RSpec.describe BSFlow::Combine do
              and_return(expected_output)
     end
   end
-  
-  30.times do
-    subject {
-      described_class.new(
-        sub_procs: all_sub_procs,
-        combine_proc: combine_proc
-      )
-    }
-    it "returns correct value" do
-      expect(subject.call(*inputs)).to eq expected_output
-    end
-  end
 
   context "procs passed only like normal arguments" do
     subject {
       described_class.new(
-        *all_sub_procs,
-        combine_proc: combine_proc
+        *all_sub_procs, combine_proc
       )
     }
     30.times do
@@ -81,24 +68,4 @@ RSpec.describe BSFlow::Combine do
       end
     end
   end
-
-  context "procs passed both ways simultanously" do
-    let (:split_point) { Random.new.rand(0..(number_of_sub_procs)) }
-    let (:arg_procs) { all_sub_procs[0, split_point] }
-    let (:kw_procs)  { all_sub_procs[split_point..-1] }
-    
-    subject {
-      described_class.new(
-        *arg_procs,
-        sub_procs: kw_procs,
-        combine_proc: combine_proc
-      )
-    }
-    30.times do
-      it "returns correct value" do
-        expect(subject.call(*inputs)).to eq expected_output
-      end
-    end
-  end
-
 end
